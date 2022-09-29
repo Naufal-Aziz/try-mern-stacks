@@ -13,6 +13,15 @@ const getGoals = asyncHandler(async (req, res) => {
   res.status(200).json(goals);
 });
 
+// @desc   Get goals
+// @route  GET /api/goals
+// @access Private
+const getGoalById = asyncHandler(async (req, res) => {
+  // const goal = await Goal.find({ _id: req.id , user: req.user.id })
+  console.log(req.id);
+  // res.status(200).json(goal);
+});
+
 // @desc   Set goals
 // @route  POST /api/goals
 // @access Private
@@ -41,16 +50,14 @@ const updateGoal = asyncHandler(async (req, res) => {
     throw new Error('Goal not found')
   }
 
-  const user = await User.findById(req.user.id)
-
   // Check for user
-  if(!user) {
+  if(!req.user) {
     res.status(401)
     throw new Error('User no found')
   }
 
   // Authenticate owner
-  if(goal.user.toString() !== user.id) {
+  if(goal.user.toString() !== req.user.id) {
     res.status(401)
     throw new Error('User not authorized')
   }
@@ -73,16 +80,14 @@ const deleteGoal = asyncHandler(async (req, res) => {
     throw new Error('Goal not found')
   }
 
-  const user = await User.findById(req.user.id)
-
   // Check for user
-  if(!user) {
+  if(!req.user) {
     res.status(401)
     throw new Error('User no found')
   }
 
   // Authenticate owner
-  if(goal.user.toString() !== user.id) {
+  if(goal.user.toString() !== req.user.id) {
     res.status(401)
     throw new Error('User not authorized')
   }
@@ -98,4 +103,5 @@ module.exports = {
   setGoal,
   updateGoal,
   deleteGoal,
+  getGoalById
 };
